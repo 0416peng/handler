@@ -1,27 +1,31 @@
 package com.example.handler
-object MyLooper {
-    private val sThreadLocal = ThreadLocal<MyLooper?>()
-    val queue= MyMessageQueue()
-    fun prepare(){
-        if (sThreadLocal.get()!=null){
-            throw RuntimeException("false")
+class MyLooper private constructor(){
+    val queue: MyMessageQueue= MyMessageQueue()
+    private var isRunning =true
+    companion object{
+        private val threadLocal= ThreadLocal<MyLooper>()
+        fun myLooper():MyLooper?=threadLocal.get()
+        fun prepare(){
+            if(threadLocal.get()!=null){
+                throw RuntimeException("Only one Looper may be created per thread")
+            }
+            val looper= MyLooper()
+            threadLocal.set(looper)
         }
-        sThreadLocal.set(this)
-    }
-    fun getLooper(): MyLooper{
-        val looper = sThreadLocal.get()
-        if (looper==null){
-            throw RuntimeException("No Looper;Looper.prepare()wasn't called on this thread.")
-        }
-        return looper
-    }
-    fun loop(){
-        val me =getLooper()
-        val queue=me.queue
-        while (true){
-            val msg=queue.next()
-            msg?.target?.handleMessage(msg)
-        }
-    }
+        fun loop(){
+            val me=myLooper()?:
+            throw RuntimeException("No Looper;Looper.prepare()wasn't called on this thread")
+            val queue=me.queue
+            while (true){
+                val msg=queue.next()?:continue
+                try {
+                    msg.callback?.run()
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }finally {
 
+                }
+            }
+        }
+    }
 }

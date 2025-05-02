@@ -1,34 +1,42 @@
 package com.example.handler
 
+import java.util.LinkedList
 import java.util.concurrent.locks.Condition
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
-
 class MyMessageQueue {
-    private val queue =mutableListOf<MyMessage>()
-    private val lock: Lock= ReentrantLock()
-    private val condition:Condition =lock.newCondition()
-    fun enqueueMessage(message: MyMessage){
-        lock.lock()
-        try {
-            queue.add(message)
-            condition.signalAll()
-        }finally {
-            lock.unlock()
-        }
+   private val message= LinkedList<MyMessage>()
+    @Synchronized
+    fun enqueueMessage(msg: MyMessage){
+        msg.mywhen= System.currentTimeMillis()+msg.mywhen
+        message.add(msg)
+        (this as java.lang.Object).notifyAll()
     }
+    @Synchronized
     fun next(): MyMessage?{
-        lock.lock()
-        try {
-            while (queue.isEmpty()){
-                condition.await()
+        while (message.isEmpty()){
+            try {
+                (this as java.lang.Object).wait()
+            }catch (e: InterruptedException){
+                e.printStackTrace()
             }
-            return queue.removeAt(0)
-        }catch (e: InterruptedException){
-            e.printStackTrace()
-        }finally {
-            lock.unlock()
         }
-        return null
+        val msg=message.removeFirst()
+        val delay=msg.mywhen- System.currentTimeMillis()
+        if(delay>0){
+            try {
+                (this as java.lang.Object).wait(delay)
+            }catch (e: InterruptedException){
+                e.printStackTrace()
+            }
+        }
+        return msg
     }
+    @Synchronized
+    fun clearMessages(){
+        message.clear()
+        (this as java.lang.Object).notifyAll()
+    }
+
+
 }
