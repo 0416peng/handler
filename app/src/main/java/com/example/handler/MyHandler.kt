@@ -1,13 +1,15 @@
 package com.example.handler
 
- open class MyHandler(looper: MyLooper?) {
+import android.util.Log
+
+open class MyHandler(looper: MyLooper?) {
      private val queue: MyMessageQueue= looper!!.queue
      fun sendMessageDelayed(msg: MyMessage,delayMillis: Long){
          msg.mywhen=delayMillis
          queue.enqueueMessage(msg)
      }
      open fun sendMessage(msg: MyMessage){
-         msg.what=0
+         msg.what=1
          queue.enqueueMessage(msg)
      }
      fun post(runnable: Runnable){
@@ -20,6 +22,4 @@ package com.example.handler
          msg.callback=runnable
          sendMessageDelayed(msg,delayMillis)
      }
-
-
 }

@@ -1,7 +1,9 @@
 package com.example.handler
+
+import android.util.Log
+
 class MyLooper private constructor(){
     val queue: MyMessageQueue= MyMessageQueue()
-    private var isRunning =true
     companion object{
         private val threadLocal= ThreadLocal<MyLooper>()
         fun myLooper():MyLooper?=threadLocal.get()
