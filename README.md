@@ -1,0 +1,3 @@
+1.APP的简要介绍：这是一个使用了自己编写的handler的模拟下载的app（也就是课件上的那个模拟下载），APP的界面并没有什么可以介绍的，接下来我讲解一下handler的实现，包含了Message类，MessageQueue类，Looper类以及Handler类，为了与官方的进行区分，在自己的类前面加了my,
+Message类用于封装消息，MessageQueue类负责管理消息队列，Looper类用于管理MessageQueue，Handler用于发送消息，在其他线程中，可以通过Handler的SendMessage方法将数据发送，之后会调用enqueueMessage方法将数据传入MessageQueue的队列中，之后会通过Looper的循环将数据取出，
+实现消息在线程间的通信。
