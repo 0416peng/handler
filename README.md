@@ -1,0 +1,8 @@
+APP的简要介绍：这是一个使用了自己编写的handler的模拟下载的app（也就是课件上的那个模拟下载），APP的界面并没有什么可以介绍的，接下来我讲解一下handler的实现，包含了Message类，MessageQueue类，Looper类以及Handler类，为了与官方的进行区分，在自己的类前面加了my,
+Message类用于封装消息，MessageQueue类负责管理消息队列，Looper类用于管理MessageQueue，Handler用于发送消息，在其他线程中，可以通过Handler的SendMessage方法将数据发送，之后会调用enqueueMessage方法将数据传入MessageQueue的队列中，之后会通过Looper的循环将数据取出，实现消息在线程间的通信。
+
+![image text](https://github.com/0416peng/handler/blob/master/mmexport1746445648876.gif)
+
+心得体会：在之前写项目的时候，其实并没有弄懂handler的具体逻辑，在得知handler比较重要之后写了这个任务，对于线程间通信有了更多的理解，包括其中的逻辑以及使用。
+
+待提升的地方：目前只完成了handler的基础功能，比如消息的取出存放，按序处理，延时消息，对于消息复用，排列消息等等并没有进行实现，而且我认为代码的一部分地方仍有可以改进的，比如我并没有编写用于处理数据的抽象方法Handmessage,而是重写了sendmessage进行消息处理，这种写法并不规范（写的时候没注意到，已经提交了才意识到这一点）。
