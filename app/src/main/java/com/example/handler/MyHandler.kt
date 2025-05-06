@@ -9,7 +9,7 @@ open class MyHandler(looper: MyLooper?) {
          queue.enqueueMessage(msg)
      }
      open fun sendMessage(msg: MyMessage){
-         msg.what=1
+         msg.mywhen=0
          queue.enqueueMessage(msg)
      }
      fun post(runnable: Runnable){

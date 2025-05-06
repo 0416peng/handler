@@ -33,11 +33,6 @@ class MyMessageQueue {
         }
         return msg
     }
-    @Synchronized
-    fun clearMessages(){
-        message.clear()
-        (this as java.lang.Object).notifyAll()
-    }
 
 
 }

@@ -43,6 +43,7 @@ import java.lang.Thread.currentThread
                      e.printStackTrace()
                  }
                  val msg = MyMessage()
+                 msg.what=1
                  val bundle = Bundle()
                  bundle.putInt("progress", i)
                  msg.data = bundle

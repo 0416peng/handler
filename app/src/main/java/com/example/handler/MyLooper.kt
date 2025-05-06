@@ -25,7 +25,11 @@ class MyLooper private constructor(){
                 }catch (e: Exception){
                     e.printStackTrace()
                 }finally {
-
+                    msg.flags=msg.FLAG_IN_USE
+                    msg.what=0
+                    msg.mywhen=0
+                    msg.callback=null
+                    MyMessage.recycle(msg)
                 }
             }
         }
